@@ -200,4 +200,71 @@ poetry run flake8
 poetry run mypy .
 poetry run isort .
 ```
+## Новый модуль generators
 
+В проект добавлен модуль `src/generators.py`.
+
+Он содержит функции для обработки больших объемов данных транзакций с помощью генераторов.
+
+### filter_by_currency
+
+Функция `filter_by_currency` принимает список транзакций и код валюты, а затем по очереди возвращает только те транзакции, которые соответствуют нужной валюте.
+
+Пример:
+
+```python
+from src.generators import filter_by_currency
+
+
+usd_transactions = filter_by_currency(transactions, "USD")
+
+print(next(usd_transactions))
+print(next(usd_transactions))
+```
+
+### transaction_descriptions
+
+Функция-генератор `transaction_descriptions` принимает список транзакций и по очереди возвращает описание каждой операции.
+
+Пример:
+
+```python
+from src.generators import transaction_descriptions
+
+
+descriptions = transaction_descriptions(transactions)
+
+print(next(descriptions))
+print(next(descriptions))
+```
+
+### card_number_generator
+
+Функция-генератор `card_number_generator` генерирует номера карт в формате `XXXX XXXX XXXX XXXX` в заданном диапазоне.
+
+Пример:
+
+```python
+from src.generators import card_number_generator
+
+
+for card_number in card_number_generator(1, 5):
+    print(card_number)
+```
+
+## Тестирование
+
+Для нового функционала добавлен модуль тестов `tests/test_generators.py`.
+
+В нем проверяются:
+
+- `filter_by_currency`;
+- `transaction_descriptions`;
+- `card_number_generator`.
+
+В `tests/conftest.py` добавлены новые фикстуры с тестовыми транзакциями.
+
+В тестах используются:
+
+- `@pytest.fixture` — для подготовки тестовых данных;
+- `@pytest.mark.parametrize` — для проверки нескольких вариантов входных данных в одном тесте.
