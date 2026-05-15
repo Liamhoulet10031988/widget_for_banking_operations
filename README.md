@@ -200,7 +200,9 @@ poetry run flake8
 poetry run mypy .
 poetry run isort .
 ```
-## Новый модуль generators
+## Обновление для ветки feature/homework_11_1
+
+### Новый модуль generators
 
 В проект добавлен модуль `src/generators.py`.
 
