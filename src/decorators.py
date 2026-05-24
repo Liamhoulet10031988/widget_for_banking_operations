@@ -3,6 +3,7 @@ from functools import wraps
 
 
 def write_log(message, filename=None):
+    """Записывает сообщение в файл или выводит его в консоль."""
     if filename:
         with open(filename, "a", encoding="utf-8") as file:
             file.write(message + "\n")
