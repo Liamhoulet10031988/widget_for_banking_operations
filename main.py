@@ -1,5 +1,7 @@
+from src.external_api import get_amount_in_rub
 from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
 from src.processing import filter_by_state, sort_by_date
+from src.utils import get_transactions_from_json
 from src.widget import get_date, mask_account_card
 
 
@@ -73,6 +75,12 @@ def main() -> None:
 
     for card_number in card_number_generator(1, 5):
         print(card_number)
+
+    transactions = get_transactions_from_json("data/operations.json")
+    print(transactions[:2])
+
+    if transactions:
+        print(get_amount_in_rub(transactions[0]))
 
 
 if __name__ == "__main__":

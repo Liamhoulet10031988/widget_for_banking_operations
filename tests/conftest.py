@@ -80,3 +80,36 @@ def transactions_fixture() -> list[dict]:
             "to": "Счет 14211924144426031657",
         },
     ]
+
+
+@pytest.fixture
+def rub_transaction() -> dict:
+    return {
+        "id": 1,
+        "operationAmount": {
+            "amount": "100.50",
+            "currency": {"name": "руб.", "code": "RUB"},
+        },
+    }
+
+
+@pytest.fixture
+def usd_transaction() -> dict:
+    return {
+        "id": 2,
+        "operationAmount": {
+            "amount": "10.00",
+            "currency": {"name": "USD", "code": "USD"},
+        },
+    }
+
+
+@pytest.fixture
+def eur_transaction() -> dict:
+    return {
+        "id": 3,
+        "operationAmount": {
+            "amount": "20.00",
+            "currency": {"name": "EUR", "code": "EUR"},
+        },
+    }

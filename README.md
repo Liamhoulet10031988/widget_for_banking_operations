@@ -336,3 +336,70 @@ poetry run pytest
 ```bash
 poetry run pytest --cov=src --cov-report=term-missing --cov-report=html:coverage_html
 ```
+## Обновление для ветки feature/homework_12_1
+
+### Структура проекта 
+
+- `src/utils.py`
+- `src/external_api.py`
+- `data/operations.json`
+- `tests/test_utils.py`
+- `tests/test_external_api.py`
+- `.env.example`
+
+### Новые модули
+
+В проект добавлены новые модули:
+
+- `src/utils.py` - для чтения транзакций из JSON-файла;
+- `src/external_api.py` - для получения суммы транзакции в рублях через внешний API.
+
+### Работа с JSON
+
+Функция `get_transactions_from_json` принимает путь к JSON-файлу и возвращает список транзакций.
+
+Если файл:
+
+- не найден;
+- пустой;
+- содержит не список;
+
+функция возвращает пустой список.
+
+### Работа с внешним API
+
+Функция `get_amount_in_rub` принимает транзакцию и возвращает сумму операции в рублях.
+
+Если валюта транзакции:
+
+- `RUB` - возвращается исходная сумма;
+- `USD` или `EUR` - выполняется запрос к API курса валют и сумма пересчитывается в рубли.
+
+Для хранения API-ключа используется файл `.env`.
+
+В репозитории добавлен шаблон `.env.example`.
+
+### Тестирование
+
+Для нового функционала добавлены:
+
+- `tests/test_utils.py`
+- `tests/test_external_api.py`
+
+В тестах используются:
+
+- `tmp_path` - для временных файлов JSON;
+- `Mock` - для поддельного ответа API;
+- `patch` - для подмены `requests.get`.
+
+### Запуск тестов
+
+```bash
+poetry run pytest
+```
+
+### Проверка покрытия
+
+```bash
+poetry run pytest --cov=src --cov-report=term-missing --cov-report=html:coverage_html
+```
