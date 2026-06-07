@@ -36,7 +36,12 @@ def get_mask_card_number(card_number: int) -> str:
 def get_mask_account(acc_number: int) -> str:
     """Функция маскировки номера банковского счета"""
     acc_number_str = str(acc_number)
+    logger.info("Начата маскировка номера счета")
 
     if len(acc_number_str) == 20 and acc_number_str.isdigit():
-        return f"**{acc_number_str[-4:]}"
+        masked_account = f"**{acc_number_str[-4:]}"
+        logger.info("Номер счета успешно замаскирован")
+        return masked_account
+
+    logger.warning("Передан некорректный номер счета")
     return "Введите корректный номер счета"
