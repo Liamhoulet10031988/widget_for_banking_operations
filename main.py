@@ -1,7 +1,7 @@
 from src.external_api import get_amount_in_rub
 from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
 from src.processing import filter_by_state, sort_by_date
-from src.utils import get_transactions_from_json
+from src.utils import get_transactions_from_csv, get_transactions_from_excel, get_transactions_from_json
 from src.widget import get_date, mask_account_card
 
 
@@ -81,6 +81,12 @@ def main() -> None:
 
     if transactions:
         print(get_amount_in_rub(transactions[0]))
+
+    csv_transactions = get_transactions_from_csv("data/transactions.csv")
+    print(csv_transactions[:2])
+
+    excel_transactions = get_transactions_from_excel("data/transactions_excel.xlsx")
+    print(excel_transactions[:2])
 
 
 if __name__ == "__main__":

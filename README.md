@@ -442,7 +442,72 @@ poetry run pytest --cov=src --cov-report=term-missing --cov-report=html:coverage
 Для ручной проверки можно запустить:
 
 ```bash
-python main.py
+poetry run python main.py
 ```
 
 После запуска приложения в папке `logs` будут созданы файлы логов для модулей `masks` и `utils`.
+
+## Обновление для ветки feature/homework_13_1
+
+### Поддержка CSV и XLSX
+
+В проект добавлена поддержка чтения финансовых операций из файлов CSV и XLSX.
+
+Добавлены функции в модуле `src/utils.py`:
+
+- `get_transactions_from_csv` - читает операции из CSV-файла и возвращает список словарей;
+- `get_transactions_from_excel` - читает операции из XLSX-файла и возвращает список словарей.
+
+Для работы с табличными данными используется библиотека `pandas`.
+
+Для чтения Excel-файлов дополнительно используется библиотека `openpyxl`.
+
+### Файлы данных
+
+Файлы с операциями располагаются в папке `data`:
+
+```text
+data/
+├── operations.json
+├── transactions.csv
+└── transactions_excel.xlsx
+```
+
+### Пример использования
+
+```python
+from src.utils import get_transactions_from_csv, get_transactions_from_excel
+
+
+csv_transactions = get_transactions_from_csv("data/transactions.csv")
+excel_transactions = get_transactions_from_excel("data/transactions_excel.xlsx")
+
+print(csv_transactions[:2])
+print(excel_transactions[:2])
+```
+
+### Тестирование
+
+Для нового функционала добавлены тесты в `tests/test_utils.py`.
+
+Проверяется:
+
+- чтение корректного CSV-файла;
+- возврат пустого списка, если CSV-файл не найден;
+- чтение корректного XLSX-файла;
+- возврат пустого списка, если XLSX-файл не найден.
+
+Для тестов используются:
+
+- `tmp_path` - для создания временных тестовых файлов;
+- `pandas.DataFrame` - для создания временного Excel-файла внутри теста.
+
+### Запуск проверок
+
+```bash
+poetry run pytest
+poetry run pytest --cov=src --cov-report=term-missing --cov-report=html:coverage_html
+poetry run flake8
+poetry run isort .
+poetry run mypy .
+```

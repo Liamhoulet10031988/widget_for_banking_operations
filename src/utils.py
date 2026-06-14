@@ -2,6 +2,8 @@ import json
 import logging
 import os
 
+import pandas as pd
+
 logger = logging.getLogger("utils")
 logger.setLevel(logging.INFO)
 
@@ -36,3 +38,36 @@ def get_transactions_from_json(path: str) -> list[dict]:
     logger.info(f"JSON-файл {path} успешно прочитан")
 
     return data
+
+
+def get_transactions_from_csv(path: str) -> list[dict]:
+    """Возвращает список транзакций из CSV-Файла"""
+    logger.info(f"Открытие CSV-файла: {path}")
+
+    try:
+        data = pd.read_csv(path, delimiter=";", encoding="utf-8")
+    except FileNotFoundError:
+        logger.error(f"CSV-Файл не найден: {path}")
+        return []
+    except Exception as error:
+        logger.error(f"Ошибка при чтении CSV-файла: {path}: {error}")
+        return []
+    logger.info(f"CSV-файл {path} успешно прочитан")
+    return data.to_dict(orient="records")
+
+
+def get_transactions_from_excel(path: str) -> list[dict]:
+    """Возвращает список транзакций из XLSX-файла"""
+    logger.info(f"Открытие XLSX-файла: {path}")
+
+    try:
+        data = pd.read_excel(path)
+    except FileNotFoundError:
+        logger.error(f"XLSX-файл не найденЖ: {path}")
+        return []
+    except Exception as error:
+        logger.error(f"Ошибка при чтении XLSX-файла {path}: {error}")
+        return []
+
+    logger.info(f"XLSX-файл {path} успешно прочитан")
+    return data.to_dict(orient="records")
