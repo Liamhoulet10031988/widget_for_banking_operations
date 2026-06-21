@@ -1,4 +1,4 @@
-from src.processing import filter_by_state, sort_by_date
+from src.processing import filter_by_state, process_bank_operations, process_bank_search, sort_by_date
 
 
 def test_filter_by_state_default(operations_fixture: list[dict]) -> None:
@@ -42,3 +42,56 @@ def test_sort_by_date_same_dates() -> None:
     ]
 
     assert sort_by_date(operations) == operations
+
+
+def test_process_bank_search_found() -> None:
+    operations = [
+        {"description": "Перевод организации"},
+        {"description": "Открытие вклада"},
+        {"description": "Перевод с карты на карту"},
+    ]
+
+    result = process_bank_search(operations, "перевод")
+
+    assert result == [
+        {"description": "Перевод организации"},
+        {"description": "Перевод с карты на карту"},
+    ]
+
+
+def test_process_bank_search_not_found() -> None:
+    operations = [
+        {"description": "Открытие вклада"},
+    ]
+
+    assert process_bank_search(operations, "карта") == []
+
+
+def test_process_bank_search_with_special_symbol() -> None:
+    operations = [
+        {"description": "Оплата услуг?"},
+        {"description": "Перевод организации"},
+    ]
+
+    assert process_bank_search(operations, "услуг?") == [
+        {"description": "Оплата услуг?"},
+    ]
+
+
+def test_process_bank_operations() -> None:
+    operations = [
+        {"description": "Перевод организации"},
+        {"description": "Перевод организации"},
+        {"description": "Открытие вклада"},
+    ]
+    categories = [
+        "Перевод организации",
+        "Открытие вклада",
+        "Перевод с карты на карту",
+    ]
+
+    assert process_bank_operations(operations, categories) == {
+        "Перевод организации": 2,
+        "Открытие вклада": 1,
+        "Перевод с карты на карту": 0,
+    }
