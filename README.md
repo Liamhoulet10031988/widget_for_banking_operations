@@ -1,0 +1,556 @@
+# Widget for Banking Operations
+
+Проект предназначен для обработки данных о банковских операциях клиента.
+
+В проекте реализованы функции для:
+- маскировки номеров банковских карт и счетов;
+- форматирования даты;
+- фильтрации операций по статусу;
+- сортировки операций по дате.
+
+## Цель проекта
+
+Цель проекта — закрепить работу с функциями, списками словарей, аннотациями типов, сортировкой, фильтрацией, Git, GitHub и GitFlow.
+
+## Структура проекта
+
+```text
+widget_for_banking_operations/
+├── src/
+│   ├── masks.py
+│   ├── widget.py
+│   └── processing.py
+├── main.py
+├── pyproject.toml
+├── poetry.lock
+└── README.md
+```
+
+## Установка проекта
+
+Клонируйте репозиторий:
+
+```bash
+git clone https://github.com/Liamhoulet10031988/widget_for_banking_operations.git
+```
+
+Перейдите в папку проекта:
+
+```bash
+cd widget_for_banking_operations
+```
+
+Установите зависимости:
+
+```bash
+poetry install
+```
+
+Активируйте виртуальное окружение:
+
+```bash
+poetry shell
+```
+
+## Использование функций
+
+### filter_by_state
+
+Функция `filter_by_state` фильтрует список банковских операций по значению ключа `state`.
+
+По умолчанию функция возвращает операции со статусом `EXECUTED`.
+
+Пример:
+
+```python
+from src.processing import filter_by_state
+
+
+operations = [
+    {"id": 41428829, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
+    {"id": 939719570, "state": "EXECUTED", "date": "2018-06-30T02:08:58.425572"},
+    {"id": 594226727, "state": "CANCELED", "date": "2018-09-12T21:27:25.241689"},
+    {"id": 615064591, "state": "CANCELED", "date": "2018-10-14T08:21:33.419441"},
+]
+
+print(filter_by_state(operations))
+print(filter_by_state(operations, "CANCELED"))
+```
+
+### sort_by_date
+
+Функция `sort_by_date` сортирует список банковских операций по дате из ключа `date`.
+
+По умолчанию сортировка выполняется по убыванию: сначала идут самые новые операции.
+
+Пример:
+
+```python
+from src.processing import sort_by_date
+
+
+operations = [
+    {"id": 41428829, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
+    {"id": 939719570, "state": "EXECUTED", "date": "2018-06-30T02:08:58.425572"},
+    {"id": 594226727, "state": "CANCELED", "date": "2018-09-12T21:27:25.241689"},
+    {"id": 615064591, "state": "CANCELED", "date": "2018-10-14T08:21:33.419441"},
+]
+
+print(sort_by_date(operations))
+print(sort_by_date(operations, reverse=False))
+```
+
+## Запуск проекта
+
+Для запуска демонстрации работы функций используйте команду:
+
+```bash
+python main.py
+```
+
+## Проверка кода
+
+Для проверки качества кода можно использовать команды:
+
+```bash
+poetry run flake8
+```
+
+```bash
+poetry run mypy .
+```
+
+```bash
+poetry run isort .
+```
+
+## Описание основных функций
+
+### get_mask_card_number
+
+Функция маскирует номер банковской карты.
+
+### get_mask_account
+
+Функция маскирует номер банковского счета.
+
+### mask_account_card
+
+Функция принимает строку с типом карты или счета и номером, а возвращает строку с замаскированным номером.
+
+### get_date
+
+Функция преобразует дату из формата `YYYY-MM-DDTHH:MM:SS` в формат `ДД.ММ.ГГГГ`.
+
+### filter_by_state
+
+Функция возвращает новый список операций, у которых значение ключа `state` совпадает с переданным значением.
+
+### sort_by_date
+
+Функция возвращает новый список операций, отсортированный по дате.
+
+## Обновление для ветки feature/homework_10_2
+
+### Тестирование
+
+Для проекта добавлены автоматические тесты с использованием `pytest`.
+
+Тесты расположены в папке `tests`:
+
+```text
+tests/
+├── conftest.py
+├── test_masks.py
+├── test_widget.py
+└── test_processing.py
+```
+
+В тестах используются:
+- фикстуры;
+- параметризация;
+- проверка покрытия кода тестами.
+
+### Запуск тестов
+
+```bash
+poetry run pytest
+```
+
+Команда запускает все тесты проекта и показывает результат их выполнения в терминале.
+
+### Проверка покрытия кода
+
+```bash
+poetry run pytest --cov=src --cov-report=term-missing --cov-report=html:coverage_html
+```
+
+Команда:
+- запускает тесты;
+- считает процент покрытия кода тестами;
+- выводит краткий отчет в терминал;
+- создает HTML-отчет в папке `coverage_html/`.
+
+HTML-отчет `coverage_html/index.html`.
+
+### Дополнительная проверка качества кода
+
+```bash
+poetry run flake8
+poetry run mypy .
+poetry run isort .
+```
+## Обновление для ветки feature/homework_11_1
+
+### Новый модуль generators
+
+В проект добавлен модуль `src/generators.py`.
+
+Он содержит функции для обработки больших объемов данных транзакций с помощью генераторов.
+
+### filter_by_currency
+
+Функция `filter_by_currency` принимает список транзакций и код валюты, а затем по очереди возвращает только те транзакции, которые соответствуют нужной валюте.
+
+Пример:
+
+```python
+from src.generators import filter_by_currency
+
+
+usd_transactions = filter_by_currency(transactions, "USD")
+
+print(next(usd_transactions))
+print(next(usd_transactions))
+```
+
+### transaction_descriptions
+
+Функция-генератор `transaction_descriptions` принимает список транзакций и по очереди возвращает описание каждой операции.
+
+Пример:
+
+```python
+from src.generators import transaction_descriptions
+
+
+descriptions = transaction_descriptions(transactions)
+
+print(next(descriptions))
+print(next(descriptions))
+```
+
+### card_number_generator
+
+Функция-генератор `card_number_generator` генерирует номера карт в формате `XXXX XXXX XXXX XXXX` в заданном диапазоне.
+
+Пример:
+
+```python
+from src.generators import card_number_generator
+
+
+for card_number in card_number_generator(1, 5):
+    print(card_number)
+```
+
+## Тестирование
+
+Для нового функционала добавлен модуль тестов `tests/test_generators.py`.
+
+В нем проверяются:
+
+- `filter_by_currency`;
+- `transaction_descriptions`;
+- `card_number_generator`.
+
+В `tests/conftest.py` добавлены новые фикстуры с тестовыми транзакциями.
+
+В тестах используются:
+
+- `@pytest.fixture` — для подготовки тестовых данных;
+- `@pytest.mark.parametrize` — для проверки нескольких вариантов входных данных в одном тесте.
+
+## Обновление для ветки feature/homework_11_2
+
+### Новый модуль decorators
+
+В проект добавлен модуль `src/decorators.py`.
+
+В нем реализован декоратор `log`, который позволяет автоматически логировать:
+
+- время вызова функции;
+- имя функции;
+- переданные аргументы;
+- результат выполнения;
+- информацию об ошибках.
+
+### Использование декоратора `log`
+
+Если `filename` не передан, лог выводится в консоль:
+
+```python
+from src.decorators import log
+
+
+@log()
+def add(a, b):
+    return a + b
+```
+
+Если `filename` передан, лог записывается в файл:
+
+```python
+from src.decorators import log
+
+
+@log(filename="app.log")
+def multiply(a, b):
+    return a * b
+```
+
+### Тестирование
+
+Для нового функционала добавлен файл `tests/test_decorators.py`.
+
+В тестах проверяются:
+
+- успешный вывод логов в консоль;
+- логирование ошибок в консоль;
+- успешная запись логов в файл;
+- запись ошибок в файл;
+- сохранение имени и `docstring` через `wraps`.
+
+Для проверки вывода в консоль используется фикстура `capsys`.
+
+Для проверки записи в файл используется встроенная фикстура `tmp_path`, которая создает временный путь для тестового файла.
+
+Запуск тестов:
+
+```bash
+poetry run pytest
+```
+
+Проверка покрытия:
+
+```bash
+poetry run pytest --cov=src --cov-report=term-missing --cov-report=html:coverage_html
+```
+## Обновление для ветки feature/homework_12_1
+
+### Структура проекта 
+
+- `src/utils.py`
+- `src/external_api.py`
+- `data/operations.json`
+- `tests/test_utils.py`
+- `tests/test_external_api.py`
+- `.env.example`
+
+### Новые модули
+
+В проект добавлены новые модули:
+
+- `src/utils.py` - для чтения транзакций из JSON-файла;
+- `src/external_api.py` - для получения суммы транзакции в рублях через внешний API.
+
+### Работа с JSON
+
+Функция `get_transactions_from_json` принимает путь к JSON-файлу и возвращает список транзакций.
+
+Если файл:
+
+- не найден;
+- пустой;
+- содержит не список;
+
+функция возвращает пустой список.
+
+### Работа с внешним API
+
+Функция `get_amount_in_rub` принимает транзакцию и возвращает сумму операции в рублях.
+
+Если валюта транзакции:
+
+- `RUB` - возвращается исходная сумма;
+- `USD` или `EUR` - выполняется запрос к API курса валют и сумма пересчитывается в рубли.
+
+Для хранения API-ключа используется файл `.env`.
+
+В репозитории добавлен шаблон `.env.example`.
+
+### Тестирование
+
+Для нового функционала добавлены:
+
+- `tests/test_utils.py`
+- `tests/test_external_api.py`
+
+В тестах используются:
+
+- `tmp_path` - для временных файлов JSON;
+- `Mock` - для поддельного ответа API;
+- `patch` - для подмены `requests.get`.
+
+### Запуск тестов
+
+```bash
+poetry run pytest
+```
+
+### Проверка покрытия
+
+```bash
+poetry run pytest --cov=src --cov-report=term-missing --cov-report=html:coverage_html
+```
+## Обновление для ветки feature/homework_12_2
+
+### Логирование
+
+В проект добавлено логирование с использованием стандартной библиотеки `logging`.
+
+Логеры реализованы для модулей:
+
+- `masks`
+- `utils`
+
+### Файлы логов
+
+Логи записываются в папку `logs` в корне проекта.
+
+Используются файлы:
+
+- `logs/masks.log`
+- `logs/utils.log`
+
+Файлы логов:
+
+- имеют расширение `.log`;
+- перезаписываются при каждом новом запуске приложения;
+- содержат время события, имя модуля, уровень логирования и сообщение.
+
+### Формат логов
+
+Для записи логов используется формат:
+
+```python
+"%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+```
+
+### Проверка работы
+
+Для ручной проверки можно запустить:
+
+```bash
+poetry run python main.py
+```
+
+После запуска приложения в папке `logs` будут созданы файлы логов для модулей `masks` и `utils`.
+
+## Обновление для ветки feature/homework_13_1
+
+### Поддержка CSV и XLSX
+
+В проект добавлена поддержка чтения финансовых операций из файлов CSV и XLSX.
+
+Добавлены функции в модуле `src/utils.py`:
+
+- `get_transactions_from_csv` - читает операции из CSV-файла и возвращает список словарей;
+- `get_transactions_from_excel` - читает операции из XLSX-файла и возвращает список словарей.
+
+Для работы с табличными данными используется библиотека `pandas`.
+
+Для чтения Excel-файлов дополнительно используется библиотека `openpyxl`.
+
+### Файлы данных
+
+Файлы с операциями располагаются в папке `data`:
+
+```text
+data/
+├── operations.json
+├── transactions.csv
+└── transactions_excel.xlsx
+```
+
+### Пример использования
+
+```python
+from src.utils import get_transactions_from_csv, get_transactions_from_excel
+
+
+csv_transactions = get_transactions_from_csv("data/transactions.csv")
+excel_transactions = get_transactions_from_excel("data/transactions_excel.xlsx")
+
+print(csv_transactions[:2])
+print(excel_transactions[:2])
+```
+
+### Тестирование
+
+Для нового функционала добавлены тесты в `tests/test_utils.py`.
+
+Проверяется:
+
+- чтение корректного CSV-файла;
+- возврат пустого списка, если CSV-файл не найден;
+- чтение корректного XLSX-файла;
+- возврат пустого списка, если XLSX-файл не найден.
+
+Для тестов используются:
+
+- `tmp_path` - для создания временных тестовых файлов;
+- `pandas.DataFrame` - для создания временного Excel-файла внутри теста.
+
+### Запуск проверок
+
+```bash
+poetry run pytest
+poetry run pytest --cov=src --cov-report=term-missing --cov-report=html:coverage_html
+poetry run flake8
+poetry run isort .
+poetry run mypy .
+```
+
+## Обновление для ветки feature/homework_13_2
+
+### Поиск, подсчет категорий и интерактивная программа
+
+В проект добавлена логика для работы с регулярными выражениями и интерактивное меню пользователя.
+
+Добавлены функции в `src/processing.py`:
+
+- `process_bank_search` - ищет операции по строке в описании с использованием библиотеки `re`;
+- `process_bank_operations` - считает количество операций по указанным категориям с использованием `Counter` из `collections`.
+
+Обновлен модуль `main.py`.
+
+Теперь программа позволяет:
+
+- выбрать источник данных: JSON, CSV или XLSX;
+- отфильтровать операции по статусу `EXECUTED`, `CANCELED`, `PENDING`;
+- отсортировать операции по дате;
+- оставить только рублевые транзакции;
+- выполнить поиск по слову в описании операции;
+- вывести итоговый список операций в консоль.
+
+### Используемые библиотеки
+
+- `re` - поиск операций по описанию;
+- `collections.Counter` - подсчет операций по категориям;
+
+### Запуск программы
+
+```bash
+poetry run python main.py
+```
+
+### Запуск тестов и проверок
+
+```bash
+poetry run pytest
+poetry run pytest --cov=src --cov-report=term-missing --cov-report=html:coverage_html
+poetry run flake8
+poetry run isort .
+poetry run mypy .
+```
